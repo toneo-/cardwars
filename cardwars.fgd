@@ -1,0 +1,14 @@
+// Name:	cardwars.fgd
+// Author:	toneo
+//
+// A bunch of definitions useful when editing a map in Hammer.
+
+models/editor/playerstart.mdl
+
+@PointClass base(Targetname, Origin) color( 0 0 255 ) studio("models/editor/playerstart.mdl") = cw_spawn_blue: "Card Wars Blue Spawnpoint"
+[
+]
+
+@PointClass base(Targetname, Origin) color( 255 0 0 ) studio("models/editor/playerstart.mdl") = cw_spawn_red: "Card Wars Red Spawnpoint"
+[
+]

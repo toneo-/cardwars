@@ -2,7 +2,7 @@
 {
 	"base"					"base"
 	"title"					"Card Wars"
-	"maps"					"^gm_cw_"
+	"maps"					"^cw_"
 	"menusystem"		"1"
 	//"workshopid"		"notgotoneyet"
 	
