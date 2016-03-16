@@ -11,6 +11,15 @@ AddCSLuaFile( "shared.lua" )
 
 include( "shared.lua" )
 
+--[[
+	Name:	GM:PlayerInitialSpawn( ply )
+	Desc:	Called when a player spawns for the first time.
+]]
+function GM:PlayerInitialSpawn( ply )
+	
+	
+	
+end
 
 --[[
 	Name:	GM:PlayerSpawn( ply )
@@ -18,7 +27,12 @@ include( "shared.lua" )
 ]]
 function GM:PlayerSpawn( ply )
 	
-	local spawnpoints = ents.FindByClass( "cw_spawn_red" )
-	ply:SetPos( spawnpoints[1]:GetPos() )
-	
+end
+
+
+--[[
+	Name:	GM:InitPostEntity()
+	Desc:	Called when all the entities on the map have been initialised.
+]]
+function GM:InitPostEntity()	
 end
