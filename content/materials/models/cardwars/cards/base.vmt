@@ -1,0 +1,7 @@
+"VertexLitGeneric"
+{
+	"$basetexture" "models/cardwars/cards/base"
+	"$surfaceprop" "wood"
+	"$nodecal" 1
+	"$model" 1
+}

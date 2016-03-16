@@ -1,14 +1,57 @@
 // Name:	cardwars.fgd
 // Author:	toneo
-//
+// 
 // A bunch of definitions useful when editing a map in Hammer.
 
-models/editor/playerstart.mdl
-
+// Spawnpoints for each team
 @PointClass base(Targetname, Origin) color( 0 0 255 ) studio("models/editor/playerstart.mdl") = cw_spawn_blue: "Card Wars Blue Spawnpoint"
 [
 ]
 
 @PointClass base(Targetname, Origin) color( 255 0 0 ) studio("models/editor/playerstart.mdl") = cw_spawn_red: "Card Wars Red Spawnpoint"
 [
+]
+
+// Spawnpoints for each team's fighters
+@PointClass base(Targetname, Origin) color( 255 0 0 ) studio("models/editor/playerstart.mdl") = cw_npc_spawn_red: "Card Wars Red Spawnpoint (NPC)"
+[
+]
+
+@PointClass base(Targetname, Origin) color( 0 0 255 ) studio("models/editor/playerstart.mdl") = cw_npc_spawn_blue: "Card Wars Blue Spawnpoint (NPC)"
+[
+]
+
+// Spawnpoint for cards
+@PointClass base(Targetname, Origin) color( 255 0 0 ) studio("models/editor/playerstart.mdl") = cw_card_spawner: "Card Spawner"
+[
+	cardType(choices) : "Card Type" : 0 : "Which cards does this spawner handle?" =
+	[
+		0 : "Red Team"
+		1 : "Blue Team"
+	]
+	
+	output OnCardSpawned(void) : "Fires when a card was spawned. Does not fire when a bonus card is spawned."
+	output OnBonusCardSpawned(void) : "Fires when a bonus card was spawned."
+]
+
+@PointClass base(Targetname, Origin) color( 255 0 255 ) studio("models/cardwars/card.mdl") = cw_card_holder: "Card Holder"
+[
+	team(choices) : "Assigned Team" : 0 : "Which team does this card holder belong to?" =
+	[
+		0 : "None"
+		1 : "Red"
+		2 : "Blue"
+	]
+	
+	output OnCardGrabbed(void) : "Fires when the holder grabs a card."
+	output OnCardLost(void) : "Fires when the card is taken."
+]
+
+@PointClass base(Targetname, Origin) color( 255 0 255 ) studio("models/cardwars/card.mdl") = cw_interface: "Gamemode Interface"
+[
+	output OnRoundStarted(void) : "Fires when the gamemode starts the round."
+	output OnRoundEnded(void) : "Fires when the gamemode ends the round."
+	
+	output OnRedWin(void) : "Fires when the red team wins the round."
+	output OnBlueWin(void) : "Fires when the blue team wins the round."
 ]
