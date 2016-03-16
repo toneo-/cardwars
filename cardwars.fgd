@@ -22,16 +22,8 @@
 ]
 
 // Spawnpoint for cards
-@PointClass base(Targetname, Origin) color( 255 0 0 ) studio("models/editor/playerstart.mdl") = cw_card_spawner: "Card Spawner"
+@PointClass base(Targetname, Origin) color( 255 0 0 ) studio("models/editor/axis_helper_thick.mdl") = cw_card_spawner: "Card Spawner"
 [
-	cardType(choices) : "Card Type" : 0 : "Which cards does this spawner handle?" =
-	[
-		0 : "Red Team"
-		1 : "Blue Team"
-	]
-	
-	output OnCardSpawned(void) : "Fires when a card was spawned. Does not fire when a bonus card is spawned."
-	output OnBonusCardSpawned(void) : "Fires when a bonus card was spawned."
 ]
 
 @PointClass base(Targetname, Origin) color( 255 0 255 ) studio("models/cardwars/card.mdl") = cw_card_holder: "Card Holder"
@@ -45,13 +37,18 @@
 	
 	output OnCardGrabbed(void) : "Fires when the holder grabs a card."
 	output OnCardLost(void) : "Fires when the card is taken."
+	
+	input RemoveHeldCard(void) : "Deletes the card held by this holder."
 ]
 
-@PointClass base(Targetname, Origin) color( 255 0 255 ) studio("models/cardwars/card.mdl") = cw_interface: "Gamemode Interface"
+@PointClass base(Targetname, Origin) color( 255 0 255 ) studio("models/editor/axis_helper_thick.mdl") = cw_interface: "Gamemode Interface"
 [
 	output OnRoundStarted(void) : "Fires when the gamemode starts the round."
 	output OnRoundEnded(void) : "Fires when the gamemode ends the round."
 	
 	output OnRedWin(void) : "Fires when the red team wins the round."
 	output OnBlueWin(void) : "Fires when the blue team wins the round."
+	
+	input StartRound(void) : "Starts the round immediately."
+	input SpawnCards(void) : "Spawns random cards at all Card Spawners."
 ]
