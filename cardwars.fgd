@@ -22,11 +22,11 @@
 ]
 
 // Spawnpoint for cards
-@PointClass base(Targetname, Origin) color( 255 0 0 ) studio("models/editor/axis_helper_thick.mdl") = cw_card_spawner: "Card Spawner"
+@PointClass base(Targetname, Parentname, Origin) color( 255 0 0 ) studio("models/editor/axis_helper_thick.mdl") = cw_card_spawner: "Card Spawner"
 [
 ]
 
-@PointClass base(Targetname, Origin) color( 255 0 255 ) studio("models/cardwars/card.mdl") = cw_card_holder: "Card Holder"
+@PointClass base(Targetname, Parentname, Origin, Angles) color( 255 0 255 ) studio("models/cardwars/card.mdl") = cw_card_holder: "Card Holder"
 [
 	team(choices) : "Assigned Team" : 0 : "Which team does this card holder belong to?" =
 	[
