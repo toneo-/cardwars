@@ -11,8 +11,8 @@ GM.Author	= "toneo"
 GM.Email	= "Don't, see github"
 GM.Website	= "https://github.com/toneo-/cardwars"
 
-TEAM_RED = 1002
-TEAM_BLUE = 1003
+GM.TEAM_RED = 1002
+GM.TEAM_BLUE = 1003
 
 
 

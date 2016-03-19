@@ -3,6 +3,8 @@
 // 
 // A bunch of definitions useful when editing a map in Hammer.
 
+@include "base.fgd"
+
 // Spawnpoints for each team
 @PointClass base(Targetname, Origin) color( 0 0 255 ) studio("models/editor/playerstart.mdl") = cw_spawn_blue: "Card Wars Blue Spawnpoint"
 [
@@ -22,22 +24,26 @@
 ]
 
 // Spawnpoint for cards
-@PointClass base(Targetname, Parentname, Origin) color( 255 0 0 ) studio("models/editor/axis_helper_thick.mdl") = cw_card_spawner: "Card Spawner"
+@PointClass base(Targetname, Parentname, Origin, Angles) color( 255 0 0 ) studio("models/editor/axis_helper_thick.mdl") = cw_card_spawner: "Card Spawner"
 [
+	input SpawnCard(void) : "Spawns a random card at this spawner."
 ]
 
-@PointClass base(Targetname, Parentname, Origin, Angles) color( 255 0 255 ) studio("models/cardwars/card.mdl") = cw_card_holder: "Card Holder"
+@PointClass base(Targetname, Parentname, Origin, Angles) color( 255 0 255 ) studio("models/cardwars/card.mdl") sphere(grabDistance) = cw_card_holder: "Card Holder"
 [
-	team(choices) : "Assigned Team" : 0 : "Which team does this card holder belong to?" =
+	team(choices) : "Assigned Team" : 0 : "The game will play all cards in each team's assigned card holders. If this holder is meant for a pedestal, card bookcase or is otherwise intended to hold cards which are NOT in play, set this to None." =
 	[
 		0 : "None"
 		1 : "Red"
 		2 : "Blue"
 	]
 	
-	output OnCardGrabbed(void) : "Fires when the holder grabs a card."
-	output OnCardLost(void) : "Fires when the card is taken."
+	grabDistance(integer) : "Grab Distance" : 10 : "A card holder will look for cards within a radius of 10 units by default. Try not to make this overlap with other nearby card holders if possible."
 	
+	output OnCardGrabbed(void) : "Fires when a card is grabbed."
+	output OnCardLost(void) : "Fires when an attached card is lost."
+	
+	input ReleaseCard(void) : "Drops the card held by this holder."
 	input RemoveHeldCard(void) : "Deletes the card held by this holder."
 ]
 
@@ -50,5 +56,4 @@
 	output OnBlueWin(void) : "Fires when the blue team wins the round."
 	
 	input StartRound(void) : "Starts the round immediately."
-	input SpawnCards(void) : "Spawns random cards at all Card Spawners."
 ]
