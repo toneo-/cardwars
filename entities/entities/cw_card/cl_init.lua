@@ -73,44 +73,101 @@ end
 
 -- temp
 function ENT:Initialize()
+	
 	self:SetMaterial( "models/cardwars/cards/base" )
 	self.savedLines = false
+	
+	-- Set some card details to reasonable defaults
+	self.ID = nil
+	self.Name = "John Cena"
+	self.DescLines = {}
+	self.Health = 100
+	self.Count = 1
+	self.IsHero = true
+	self.PortraitMaterial = Material( "debug/debugwhite" )
+	
+end
+
+function ENT:Think()
+	
+	-- Think every tick until we get a valid ID. This is somewhat hacky, but is not an expensive method.
+	if ( self:GetCardIDString() ~= 0 ) and not self.ID then
+		
+		local id = util.NetworkIDToString( self:GetCardIDString() )
+		self:UpdateDetails( id )
+		
+		-- We won't need to think again
+		self:NextThink( CurTime() + 50000 )
+		return true
+		
+	else
+		
+		self:NextThink( CurTime() )
+		return true
+		
+	end
+	
+end
+
+function ENT:UpdateDetails( id )
+	
+	local definitions = GAMEMODE.CardDefinitions
+	
+	if not definitions then
+		error( "FATAL: GAMEMODE.CardDefinitions is not defined!" )
+	end
+	
+	-- Make sure the definition exists
+	local entry = definitions[ id ]
+	
+	if not entry then
+		error( "Invalid id passed to ENT:UpdateDetails()! id=" .. tostring(id), 2 )
+	end
+	
+	-- Finally retrieve details
+	self.ID = id
+	self.Name = entry.name
+	self.CardHealth = entry.health
+	self.Count = entry.count
+	self.IsHero = entry.isHero
+	self.PortraitMaterial = Material( entry.portraitMaterial )
+	self.DescLines = wrapLines( entry.description, "CardDesc", 350 )
+	
 end
 
 function ENT:Draw()
 	
 	self:DrawModel()
-	self:DrawOverlay()
+	
+	if self.ID then
+		self:DrawOverlay()
+	end
 	
 end
 
 function ENT:DrawOverlay()
 	
-	local name = util.NetworkIDToString( self:GetCardName() )
-	local desc = util.NetworkIDToString( self:GetCardDescription() )
+	local name = self.Name
+	local hp = self.CardHealth
+	local count = self.Count
+	local portrait = self.PortraitMaterial
+	local descLines = self.DescLines
 	
-	local descLines = self.savedLines
-	
-	-- Only wrap the description once.
-	-- This does mean that it won't re-wrap if :SetCardDescription() is
-	-- ever called again, but this is not a big deal.
-	if not descLines then
-		descLines = wrapLines( desc, "CardDesc", 350 )
-		self.savedLines = descLines
+	-- Don't draw if surface.SetMaterial() would fail. If we do try this we'll fuck up the camera and turn the world into nodraw.
+	if not portrait or portrait:IsError() then
+		print( "portrait=", portrait )
+		return
 	end
-	
-	
-	local hp = self:GetCardHP()
-	local count = self:GetCardNPCCount()
-	
-	local portrait = Material( "cardwars/portraits/combine-soldier" )
 	
 	local angles = self:GetAngles()
 	local angles2D = Angle()
+	
+	-- Copy our angles in 3D space, rotate so that the draw plane faces outwards.
 	angles2D:Set( angles )
 	angles2D:RotateAroundAxis( angles:Up(), 90 )
-	angles2D:RotateAroundAxis( angles:Right(), -90 )--0, 90, 90)
+	angles2D:RotateAroundAxis( angles:Right(), -90 )
 	
+	-- Reposition the draw plane so it is on the front of the model.
 	local origin = self:GetPos() + angles:Forward() * 0.6 + angles:Up() * 15 + angles:Right() * 5
 	
 	cam.Start3D2D( origin, angles2D, 0.025 )
@@ -123,9 +180,13 @@ function ENT:DrawOverlay()
 		surface.SetDrawColor( 255, 255, 255, 255 )
 		surface.DrawTexturedRect( 120, 183, 160, 160 )
 		
-		for k, v in pairs(descLines) do
+		for k, v in pairs( self.DescLines ) do
 			draw.SimpleText( v, "CardDesc", 18, 360 + (k-1) * 30, Color(255, 255, 255, 255) )
 		end
 	cam.End3D2D()
 	
+end
+
+function ENT:SetCardID( id )
+	error( "ENT:SetCardID() called clientside! This will never work.", 2 )
 end

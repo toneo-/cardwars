@@ -6,30 +6,30 @@
 @include "base.fgd"
 
 // Spawnpoints for each team
-@PointClass base(Targetname, Origin) color( 0 0 255 ) studio("models/editor/playerstart.mdl") = cw_spawn_blue: "Card Wars Blue Spawnpoint"
+@PointClass base(Targetname) color( 0 0 255 ) studio("models/editor/playerstart.mdl") = cw_spawn_blue: "Card Wars Blue Spawnpoint"
 [
 ]
 
-@PointClass base(Targetname, Origin) color( 255 0 0 ) studio("models/editor/playerstart.mdl") = cw_spawn_red: "Card Wars Red Spawnpoint"
+@PointClass base(Targetname) color( 255 0 0 ) studio("models/editor/playerstart.mdl") = cw_spawn_red: "Card Wars Red Spawnpoint"
 [
 ]
 
 // Spawnpoints for each team's fighters
-@PointClass base(Targetname, Origin) color( 255 0 0 ) studio("models/editor/playerstart.mdl") = cw_npc_spawn_red: "Card Wars Red Spawnpoint (NPC)"
+@PointClass base(Targetname) color( 255 0 0 ) studio("models/editor/playerstart.mdl") = cw_npc_spawn_red: "Card Wars Red Spawnpoint (NPC)"
 [
 ]
 
-@PointClass base(Targetname, Origin) color( 0 0 255 ) studio("models/editor/playerstart.mdl") = cw_npc_spawn_blue: "Card Wars Blue Spawnpoint (NPC)"
+@PointClass base(Targetname) color( 0 0 255 ) studio("models/editor/playerstart.mdl") = cw_npc_spawn_blue: "Card Wars Blue Spawnpoint (NPC)"
 [
 ]
 
 // Spawnpoint for cards
-@PointClass base(Targetname, Parentname, Origin, Angles) color( 255 0 0 ) studio("models/editor/axis_helper_thick.mdl") = cw_card_spawner: "Card Spawner"
+@PointClass base(Targetname, Parentname, Angles) color( 255 0 0 ) studio("models/editor/axis_helper_thick.mdl") = cw_card_spawner: "Card Spawner"
 [
 	input SpawnCard(void) : "Spawns a random card at this spawner."
 ]
 
-@PointClass base(Targetname, Parentname, Origin, Angles) color( 255 0 255 ) studio("models/cardwars/card.mdl") sphere(grabDistance) = cw_card_holder: "Card Holder"
+@PointClass base(Targetname, Parentname, Angles) color( 255 0 255 ) studio("models/cardwars/card.mdl") sphere(grabDistance) = cw_card_holder: "Card Holder"
 [
 	team(choices) : "Assigned Team" : 0 : "The game will play all cards in each team's assigned card holders. If this holder is meant for a pedestal, card bookcase or is otherwise intended to hold cards which are NOT in play, set this to None." =
 	[
@@ -47,7 +47,7 @@
 	input RemoveHeldCard(void) : "Deletes the card held by this holder."
 ]
 
-@PointClass base(Targetname, Origin) color( 255 0 255 ) studio("models/editor/axis_helper_thick.mdl") = cw_interface: "Gamemode Interface"
+@PointClass base(Targetname) color( 255 0 255 ) studio("models/editor/axis_helper_thick.mdl") = cw_interface: "Gamemode Interface"
 [
 	output OnRoundStarted(void) : "Fires when the gamemode starts the round."
 	output OnRoundEnded(void) : "Fires when the gamemode ends the round."

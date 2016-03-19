@@ -8,8 +8,10 @@
 
 AddCSLuaFile( "cl_init.lua" )
 AddCSLuaFile( "shared.lua" )
+AddCSLuaFile( "card_definitions.lua" )
 
 include( "shared.lua" )
+include( "card_definitions.lua" )
 
 --[[
 	Name:	GM:PlayerInitialSpawn( ply )

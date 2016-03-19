@@ -18,9 +18,21 @@ ENT.AdminSpawnable = true
 
 function ENT:SetupDataTables()
 	
-	self:NetworkVar( "Int", 0, "CardName" )
-	self:NetworkVar( "Int", 1, "CardDescription" )
-	self:NetworkVar( "Int", 2, "CardHP" )
-	self:NetworkVar( "Int", 3, "CardNPCCount" )
+	-- The card ID is sent over the network as a cached string.
+	self:NetworkVar( "Int", 0, "CardIDString" )
+	
+end
+
+
+--[[
+	Name:	ENT:GetCardID()
+	Desc:	Gets the ID of this card, for example 'combine-soldier'.
+]]
+function ENT:GetCardID()
+	
+	local cachedID = self:GetCardIDString()
+	if ( cachedID == 0 ) then return end
+	
+	return util.NetworkIDToString( cachedID )
 	
 end

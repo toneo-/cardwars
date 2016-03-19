@@ -28,12 +28,6 @@ function ENT:Initialize()
 	-- Only use once when E pressed
 	self:SetUseType( SIMPLE_USE )
 	
-	-- Placeholder details
-	self:SetCardName( soldier_name )
-	self:SetCardDescription( soldier_desc )
-	self:SetCardHP( 100 )
-	self:SetCardNPCCount( 3 )
-	
 	local phys = self:GetPhysicsObject()
 	if ( phys and phys:IsValid() ) then
 		phys:Wake()
@@ -118,4 +112,22 @@ end
 ]]
 function ENT:GetHolder()
 	return self.Holder
+end
+
+--[[
+	Name:	ENT:SetCardID( id )
+	Desc:	Sets the ID of this card, for example 'combine-soldier'.
+]]
+function ENT:SetCardID( id )
+	
+	local cachedID = util.NetworkStringToID( id )
+	
+	-- Just-in-case...
+	if ( cachedID == 0 ) then
+		cachedID = util.NetworkString( id )
+	end
+	
+	-- Tell the client
+	self:SetCardIDString( cachedID )
+	
 end

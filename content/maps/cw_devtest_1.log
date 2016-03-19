@@ -1,0 +1,262 @@
+
+
+
+materialPath: C:\Program Files (x86)\Steam\SteamApps\common\Source SDK Base 2013 Singleplayer\hl2\materials
+Loading C:\Users\Toneo\Projects\Lua\Garry's Mod\cardwars\content\maps\cw_devtest_1.vmf
+Could not locate 'GameData' key in c:\program files (x86)\steam\steamapps\common\source sdk base 2013 singleplayer\hl2\gameinfo.txt
+fixing up env_cubemap materials on brush sides...
+0...1...2...3...4...5...6...7...8...9...100...1...2...3...4...5...6...7...8...9...10Processing areas...done (0)
+Building Faces...done (0)
+FixTjuncs...
+PruneNodes...
+WriteBSP...
+done (0)
+writing C:\Users\Toneo\Projects\Lua\Garry's Mod\cardwars\content\maps\cw_devtest_1.prt...Building visibility clusters...
+done (0)
+Creating default LDR cubemaps for env_cubemap using skybox materials:
+   skybox/sky_day01_01*.vmt
+ ! Run buildcubemaps in the engine to get the correct cube maps.
+Creating default HDR cubemaps for env_cubemap using skybox materials:
+   skybox/sky_day01_01*.vmt
+ ! Run buildcubemaps in the engine to get the correct cube maps.
+Finding displacement neighbors...
+Finding lightmap sample positions...
+Displacement Alpha : 0...1...2...3...4...5...6...7...8...9...10
+Building Physics collision data...
+done (0) (9312 bytes)
+Placing detail props : 0...1...2...3...4...5...6...7...8...9...10
+Compacting texture/material tables...
+Reduced 51 texinfos to 40
+Reduced 7 texdatas to 7 (160 bytes to 160)
+Writing C:\Users\Toneo\Projects\Lua\Garry's Mod\cardwars\content\maps\cw_devtest_1.bsp
+0 seconds elapsed
+
+
+
+8 threads
+reading c:\users\toneo\projects\lua\garry's mod\cardwars\content\maps\cw_devtest_1.bsp
+reading c:\users\toneo\projects\lua\garry's mod\cardwars\content\maps\cw_devtest_1.prt
+  46 portalclusters
+ 144 numportals
+0...1...2...3...4...5...6...7...8...9...100...1...2...3...4...5...6...7...8...9...10Optimized: 0 visible clusters (0.00%)
+Total clusters visible: 2018
+Average clusters visible: 43
+Building PAS...
+Average clusters audible: 46
+visdatasize:924  compressed from 736
+writing c:\users\toneo\projects\lua\garry's mod\cardwars\content\maps\cw_devtest_1.bsp
+0 seconds elapsed
+
+
+
+Could not find lights.rad in lights.rad.
+Trying VRAD BIN directory instead...
+Warning: Couldn't open texlight file C:\Program Files (x86)\Steam\SteamApps\common\Source SDK Base 2013 Singleplayer\bin\lights.rad.
+Loading c:\users\toneo\projects\lua\garry's mod\cardwars\content\maps\cw_devtest_1.bsp
+181 faces
+70121 square feet [10097551.00 square inches]
+0 Displacements
+0 Square Feet [0.00 Square Inches]
+181 patches before subdivision
+6037 patches after subdivision
+4 direct lights
+0...1...2...3...4...5...6...7...8...9...100...1...2...3...4...5...6...7...8...9...10transfers 632094, max 293
+transfer lists:   4.8 megs
+0...1...2...3...4...5...6...7...8...9...10	Bounce #1 added RGB(38549, 36575, 32409)
+0...1...2...3...4...5...6...7...8...9...10	Bounce #2 added RGB(6346, 7714, 6702)
+0...1...2...3...4...5...6...7...8...9...10	Bounce #3 added RGB(1052, 1468, 1217)
+0...1...2...3...4...5...6...7...8...9...10	Bounce #4 added RGB(175, 293, 234)
+0...1...2...3...4...5...6...7...8...9...10	Bounce #5 added RGB(29, 58, 44)
+0...1...2...3...4...5...6...7...8...9...10	Bounce #6 added RGB(5, 11, 8)
+0...1...2...3...4...5...6...7...8...9...10	Bounce #7 added RGB(1, 2, 2)
+0...1...2...3...4...5...6...7...8...9...10	Bounce #8 added RGB(0, 0, 0)
+Build Patch/Sample Hash Table(s).....Done<0.0019 sec>
+0...1...2...3...4...5...6...7...8...9...10FinalLightFace Done
+0 of 0 (0% of) surface lights went in leaf ambient cubes.
+0...1...2...3...4...5...6...7...8...9...10Writing leaf ambient...done
+Ready to Finish
+
+Object names       Objects/Maxobjs  Memory / Maxmem  Fullness 
+------------       ---------------  ---------------  -------- 
+models                   3/1024          144/49152    ( 0.3%) 
+brushes                 23/8192          276/98304    ( 0.3%) 
+brushsides             178/65536        1424/524288   ( 0.3%) 
+planes                 204/65536        4080/1310720  ( 0.3%) 
+vertexes               299/65536        3588/786432   ( 0.5%) 
+nodes                   99/65536        3168/2097152  ( 0.2%) 
+texinfos                40/12288        2880/884736   ( 0.3%) 
+texdata                  7/2048          224/65536    ( 0.3%) 
+dispinfos                0/0               0/0        ( 0.0%) 
+disp_verts               0/0               0/0        ( 0.0%) 
+disp_tris                0/0               0/0        ( 0.0%) 
+disp_lmsamples           0/0               0/0        ( 0.0%) 
+faces                  181/65536       10136/3670016  ( 0.3%) 
+hdr faces                0/65536           0/3670016  ( 0.0%) 
+origfaces               93/65536        5208/3670016  ( 0.1%) 
+leaves                 103/65536        3296/2097152  ( 0.2%) 
+leaffaces              231/65536         462/131072   ( 0.4%) 
+leafbrushes             36/65536          72/131072   ( 0.1%) 
+areas                    2/256            16/2048     ( 0.8%) 
+surfedges             1222/512000       4888/2048000  ( 0.2%) 
+edges                  654/256000       2616/1024000  ( 0.3%) 
+LDR worldlights          4/8192          352/720896   ( 0.0%) 
+HDR worldlights          0/8192            0/720896   ( 0.0%) 
+leafwaterdata            0/32768           0/393216   ( 0.0%) 
+waterstrips             10/32768         100/327680   ( 0.0%) 
+waterverts               0/65536           0/786432   ( 0.0%) 
+waterindices           159/65536         318/131072   ( 0.2%) 
+cubemapsamples           0/1024            0/16384    ( 0.0%) 
+overlays                 0/512             0/180224   ( 0.0%) 
+LDR lightdata         [variable]      553180/0        ( 0.0%) 
+HDR lightdata         [variable]           0/0        ( 0.0%) 
+visdata               [variable]         924/16777216 ( 0.0%) 
+entdata               [variable]        4634/393216   ( 1.2%) 
+LDR ambient table      103/65536         412/262144   ( 0.2%) 
+HDR ambient table      103/65536         412/262144   ( 0.2%) 
+LDR leaf ambient       422/65536       11816/1835008  ( 0.6%) 
+HDR leaf ambient       103/65536        2884/1835008  ( 0.2%) 
+occluders                0/0               0/0        ( 0.0%) 
+occluder polygons        0/0               0/0        ( 0.0%) 
+occluder vert ind        0/0               0/0        ( 0.0%) 
+detail props          [variable]           1/12       ( 8.3%) 
+static props          [variable]           1/12       ( 8.3%) 
+pakfile               [variable]      105679/0        ( 0.0%) 
+physics               [variable]        9312/4194304  ( 0.2%) 
+physics terrain       [variable]           2/1048576  ( 0.0%) 
+
+Level flags = 0
+
+Total triangle count: 488
+Writing c:\users\toneo\projects\lua\garry's mod\cardwars\content\maps\cw_devtest_1.bsp
+0 seconds elapsed
+
+
+
+materialPath: C:\Program Files (x86)\Steam\SteamApps\common\Source SDK Base 2013 Singleplayer\hl2\materials
+Loading C:\Users\Toneo\Projects\Lua\Garry's Mod\cardwars\content\maps\cw_devtest_1.vmf
+Could not locate 'GameData' key in c:\program files (x86)\steam\steamapps\common\source sdk base 2013 singleplayer\hl2\gameinfo.txt
+fixing up env_cubemap materials on brush sides...
+0...1...2...3...4...5...6...7...8...9...100...1...2...3...4...5...6...7...8...9...10Processing areas...done (0)
+Building Faces...done (0)
+FixTjuncs...
+PruneNodes...
+WriteBSP...
+done (0)
+writing C:\Users\Toneo\Projects\Lua\Garry's Mod\cardwars\content\maps\cw_devtest_1.prt...Building visibility clusters...
+done (0)
+Creating default LDR cubemaps for env_cubemap using skybox materials:
+   skybox/sky_day01_01*.vmt
+ ! Run buildcubemaps in the engine to get the correct cube maps.
+Creating default HDR cubemaps for env_cubemap using skybox materials:
+   skybox/sky_day01_01*.vmt
+ ! Run buildcubemaps in the engine to get the correct cube maps.
+Finding displacement neighbors...
+Finding lightmap sample positions...
+Displacement Alpha : 0...1...2...3...4...5...6...7...8...9...10
+Building Physics collision data...
+done (0) (9312 bytes)
+Placing detail props : 0...1...2...3...4...5...6...7...8...9...10
+Compacting texture/material tables...
+Reduced 51 texinfos to 40
+Reduced 7 texdatas to 7 (160 bytes to 160)
+Writing C:\Users\Toneo\Projects\Lua\Garry's Mod\cardwars\content\maps\cw_devtest_1.bsp
+0 seconds elapsed
+
+
+
+8 threads
+reading c:\users\toneo\projects\lua\garry's mod\cardwars\content\maps\cw_devtest_1.bsp
+reading c:\users\toneo\projects\lua\garry's mod\cardwars\content\maps\cw_devtest_1.prt
+  46 portalclusters
+ 144 numportals
+0...1...2...3...4...5...6...7...8...9...100...1...2...3...4...5...6...7...8...9...10Optimized: 0 visible clusters (0.00%)
+Total clusters visible: 2018
+Average clusters visible: 43
+Building PAS...
+Average clusters audible: 46
+visdatasize:924  compressed from 736
+writing c:\users\toneo\projects\lua\garry's mod\cardwars\content\maps\cw_devtest_1.bsp
+0 seconds elapsed
+
+
+
+Could not find lights.rad in lights.rad.
+Trying VRAD BIN directory instead...
+Warning: Couldn't open texlight file C:\Program Files (x86)\Steam\SteamApps\common\Source SDK Base 2013 Singleplayer\bin\lights.rad.
+Loading c:\users\toneo\projects\lua\garry's mod\cardwars\content\maps\cw_devtest_1.bsp
+181 faces
+70121 square feet [10097551.00 square inches]
+0 Displacements
+0 Square Feet [0.00 Square Inches]
+181 patches before subdivision
+6037 patches after subdivision
+4 direct lights
+0...1...2...3...4...5...6...7...8...9...100...1...2...3...4...5...6...7...8...9...10transfers 632094, max 293
+transfer lists:   4.8 megs
+0...1...2...3...4...5...6...7...8...9...10	Bounce #1 added RGB(38549, 36575, 32409)
+0...1...2...3...4...5...6...7...8...9...10	Bounce #2 added RGB(6346, 7714, 6702)
+0...1...2...3...4...5...6...7...8...9...10	Bounce #3 added RGB(1052, 1468, 1217)
+0...1...2...3...4...5...6...7...8...9...10	Bounce #4 added RGB(175, 293, 234)
+0...1...2...3...4...5...6...7...8...9...10	Bounce #5 added RGB(29, 58, 44)
+0...1...2...3...4...5...6...7...8...9...10	Bounce #6 added RGB(5, 11, 8)
+0...1...2...3...4...5...6...7...8...9...10	Bounce #7 added RGB(1, 2, 2)
+0...1...2...3...4...5...6...7...8...9...10	Bounce #8 added RGB(0, 0, 0)
+Build Patch/Sample Hash Table(s).....Done<0.0018 sec>
+0...1...2...3...4...5...6...7...8...9...10FinalLightFace Done
+0 of 0 (0% of) surface lights went in leaf ambient cubes.
+0...1...2...3...4...5...6...7...8...9...10Writing leaf ambient...done
+Ready to Finish
+
+Object names       Objects/Maxobjs  Memory / Maxmem  Fullness 
+------------       ---------------  ---------------  -------- 
+models                   3/1024          144/49152    ( 0.3%) 
+brushes                 23/8192          276/98304    ( 0.3%) 
+brushsides             178/65536        1424/524288   ( 0.3%) 
+planes                 204/65536        4080/1310720  ( 0.3%) 
+vertexes               299/65536        3588/786432   ( 0.5%) 
+nodes                   99/65536        3168/2097152  ( 0.2%) 
+texinfos                40/12288        2880/884736   ( 0.3%) 
+texdata                  7/2048          224/65536    ( 0.3%) 
+dispinfos                0/0               0/0        ( 0.0%) 
+disp_verts               0/0               0/0        ( 0.0%) 
+disp_tris                0/0               0/0        ( 0.0%) 
+disp_lmsamples           0/0               0/0        ( 0.0%) 
+faces                  181/65536       10136/3670016  ( 0.3%) 
+hdr faces                0/65536           0/3670016  ( 0.0%) 
+origfaces               93/65536        5208/3670016  ( 0.1%) 
+leaves                 103/65536        3296/2097152  ( 0.2%) 
+leaffaces              231/65536         462/131072   ( 0.4%) 
+leafbrushes             36/65536          72/131072   ( 0.1%) 
+areas                    2/256            16/2048     ( 0.8%) 
+surfedges             1222/512000       4888/2048000  ( 0.2%) 
+edges                  654/256000       2616/1024000  ( 0.3%) 
+LDR worldlights          4/8192          352/720896   ( 0.0%) 
+HDR worldlights          0/8192            0/720896   ( 0.0%) 
+leafwaterdata            0/32768           0/393216   ( 0.0%) 
+waterstrips             10/32768         100/327680   ( 0.0%) 
+waterverts               0/65536           0/786432   ( 0.0%) 
+waterindices           159/65536         318/131072   ( 0.2%) 
+cubemapsamples           0/1024            0/16384    ( 0.0%) 
+overlays                 0/512             0/180224   ( 0.0%) 
+LDR lightdata         [variable]      553180/0        ( 0.0%) 
+HDR lightdata         [variable]           0/0        ( 0.0%) 
+visdata               [variable]         924/16777216 ( 0.0%) 
+entdata               [variable]        4618/393216   ( 1.2%) 
+LDR ambient table      103/65536         412/262144   ( 0.2%) 
+HDR ambient table      103/65536         412/262144   ( 0.2%) 
+LDR leaf ambient       422/65536       11816/1835008  ( 0.6%) 
+HDR leaf ambient       103/65536        2884/1835008  ( 0.2%) 
+occluders                0/0               0/0        ( 0.0%) 
+occluder polygons        0/0               0/0        ( 0.0%) 
+occluder vert ind        0/0               0/0        ( 0.0%) 
+detail props          [variable]           1/12       ( 8.3%) 
+static props          [variable]           1/12       ( 8.3%) 
+pakfile               [variable]      105679/0        ( 0.0%) 
+physics               [variable]        9312/4194304  ( 0.2%) 
+physics terrain       [variable]           2/1048576  ( 0.0%) 
+
+Level flags = 0
+
+Total triangle count: 488
+Writing c:\users\toneo\projects\lua\garry's mod\cardwars\content\maps\cw_devtest_1.bsp
+0 seconds elapsed
