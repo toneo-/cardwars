@@ -121,17 +121,18 @@ function ENT:UpdateDetails( id )
 	local entry = definitions[ id ]
 	
 	if not entry then
-		error( "Invalid id passed to ENT:UpdateDetails()! id=" .. tostring(id), 2 )
+		--error( "Invalid id passed to ENT:UpdateDetails()! id=" .. tostring(id), 2 )
+		return
 	end
 	
 	-- Finally retrieve details
 	self.ID = id
-	self.Name = entry.name
-	self.CardHealth = entry.health
-	self.Count = entry.count
-	self.IsHero = entry.isHero
-	self.PortraitMaterial = Material( entry.portraitMaterial )
-	self.DescLines = wrapLines( entry.description, "CardDesc", 350 )
+	self.Name = entry.Name
+	self.CardHealth = entry.Health
+	self.Count = entry.Count
+	self.IsHero = entry.IsHero
+	self.PortraitMaterial = Material( entry.PortraitMaterial or "missingtexture" )
+	self.DescLines = wrapLines( entry.Description, "CardDesc", 350 )
 	
 end
 

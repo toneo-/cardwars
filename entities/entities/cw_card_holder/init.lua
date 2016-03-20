@@ -10,6 +10,9 @@ AddCSLuaFile( "shared.lua" )
 
 include( "shared.lua" )
 
+print( "GM: " .. tostring(GM) )
+print( "GAMEMODE: " .. tostring(GAMEMODE) )
+
 local teamTranslations = {
 	[0] = 0,
 	[1] = GAMEMODE.TEAM_RED,
@@ -119,10 +122,10 @@ function ENT:KeyValue( key, value )
 		self:StoreOutput( key, value )
 		
 	else -- Must be an attribute
-				
-		if ( key == "team" ) then
+		
+		if key == "team" then
 			self:SetAssignedTeam( tonumber(value) )
-		elseif ( key == "grabDistance" ) then
+		elseif key == "grabDistance" then
 			self.GrabDistance = math.max( 0, tonumber(value) )
 		end
 		
@@ -215,7 +218,8 @@ function ENT:HoldCard( card )
 	self.HeldCard = card
 	card:SetHolder( self )
 	
-	self:EmitSound( "items/battery_pickup.wav" )
+	-- TRIGGERED
+	self:TriggerOutput( "OnCardGrabbed", self )
 end
 
 
@@ -240,5 +244,6 @@ function ENT:ReleaseCard()
 	self.HeldCard = nil
 	card:SetHolder( nil )
 	
+	self:TriggerOutput( "OnCardReleased", self )
 	self:NextThink( CurTime() + self.RegrabDelay )
 end

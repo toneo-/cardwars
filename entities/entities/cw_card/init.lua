@@ -124,7 +124,8 @@ function ENT:SetCardID( id )
 	
 	-- Just-in-case...
 	if ( cachedID == 0 ) then
-		cachedID = util.NetworkString( id )
+		print( "ENT:SetCardID() - Uncached id " .. id )
+		cachedID = util.AddNetworkString( id )
 	end
 	
 	-- Tell the client

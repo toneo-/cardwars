@@ -43,10 +43,11 @@ function ENT:AcceptInput( inputName, activator, caller, data )
 		
 		-- Grab the selected card from the definition list
 		local i = 1
-		for id, def in pairs( definitions ) do
+		for k, def in pairs( definitions ) do
 		
 			if i == selectIndex then
-				chosenID = util.NetworkStringToID( id )
+				print( "Selecting random card " .. k )
+				chosenID = k
 				break
 			end
 			
@@ -54,8 +55,9 @@ function ENT:AcceptInput( inputName, activator, caller, data )
 			
 		end
 		
-		-- Finish up
-		card:SetCardIDString( chosenID )
+		-- Stores card 
+		card:SetCardID( chosenID )
+		
 		card:Spawn()
 		
 	end
