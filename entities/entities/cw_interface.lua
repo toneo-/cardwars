@@ -18,7 +18,7 @@ function ENT:AcceptInput( inputName, activator, caller, data )
 	
 	if inputName == "StartRound" then
 		
-		if not self:IsRoundInProgress() then
+		if not GAMEMODE:IsRoundInProgress() then
 			GAMEMODE:StartRound()
 			
 			self:TriggerOutput( "OnRoundStarted", self )

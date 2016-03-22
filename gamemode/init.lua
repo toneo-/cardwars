@@ -13,6 +13,7 @@ AddCSLuaFile( "card_definitions.lua" )
 include( "shared.lua" )
 include( "card_definitions.lua" )
 include( "round.lua" )
+include( "damage.lua" )
 
 GM.RedHolders = {}
 GM.BlueHolders = {}
@@ -41,13 +42,14 @@ end
 ]]
 function GM:InitPostEntity()
 	
+	-- Find all card holders, separate into red/blue holders and store for later
 	local holders = ents.FindByClass( "cw_card_holder" )
 	
 	for _, holder in pairs( holders ) do
 		
 		local assignedTeam = holder:GetAssignedTeam()
 		
-		-- Separate into red/blue card holders and store for later		
+		-- Separate into red/blue card holders and store
 		if assignedTeam == self.TEAM_RED then
 			table.insert( self.RedHolders, holder )
 		elseif assignedTeam == self.TEAM_BLUE then

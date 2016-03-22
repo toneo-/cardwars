@@ -1,2 +1,4 @@
 # Ignore specific extensions:
 *.pdn
+todo.txt
+dev-resources/

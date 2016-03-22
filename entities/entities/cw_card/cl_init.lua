@@ -163,6 +163,11 @@ function ENT:DrawOverlay()
 	local angles = self:GetAngles()
 	local angles2D = Angle()
 	
+	local titleColor = Color(255, 255, 255, 255)
+	if self.IsHero then
+		titleColor = Color(150, 70, 150, 255)
+	end
+	
 	-- Copy our angles in 3D space, rotate so that the draw plane faces outwards.
 	angles2D:Set( angles )
 	angles2D:RotateAroundAxis( angles:Up(), 90 )
@@ -172,7 +177,7 @@ function ENT:DrawOverlay()
 	local origin = self:GetPos() + angles:Forward() * 0.6 + angles:Up() * 15 + angles:Right() * 5
 	
 	cam.Start3D2D( origin, angles2D, 0.025 )
-		draw.SimpleText( name, "CardTitle", 18, 120, Color(255, 255, 255, 255) )
+		draw.SimpleText( name, "CardTitle", 18, 120, titleColor )
 		
 		draw.SimpleText( tostring(hp), "CardDetail", 288, 71, Color(255, 0, 0, 255), TEXT_ALIGN_CENTER )
 		draw.SimpleText( "x" .. count, "CardDetail", 353, 71, Color(0, 130, 255, 255), TEXT_ALIGN_CENTER )

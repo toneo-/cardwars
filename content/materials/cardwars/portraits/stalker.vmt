@@ -1,0 +1,7 @@
+"UnlitGeneric"
+{
+	"$basetexture" "cardwars/portraits/stalker"
+	"$nodecal" 1
+	"$vertexalpha" 1
+	"$vertexcolor" 1
+}
