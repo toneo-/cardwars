@@ -24,7 +24,7 @@
 ]
 
 // Spawnpoint for cards
-@PointClass base(Targetname, Parentname, Angles) color( 255 0 0 ) studio("models/editor/axis_helper_thick.mdl") = cw_card_spawner: "Card Spawner"
+@PointClass base(Targetname, Parentname, Angles) color( 255 0 0 ) studio("models/cardwars/card.mdl") = cw_card_spawner: "Card Spawner"
 [
 	input SpawnCard(void) : "Spawns a random card at this spawner."
 ]
@@ -54,6 +54,7 @@
 	
 	output OnRedWin(void) : "Fires when the red team wins the round."
 	output OnBlueWin(void) : "Fires when the blue team wins the round."
+	output OnDraw(void): "Fires when the round ends in a draw."
 	
 	input StartRound(void) : "Starts the round immediately."
 ]

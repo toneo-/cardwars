@@ -116,7 +116,7 @@ end
 function ENT:KeyValue( key, value )
 	
 	-- All of our outputs start with 'On'
-	if string.Left( key ) == "On" then
+	if string.Left( key, 2 ) == "On" then
 	
 		-- Store so they can be triggered later
 		self:StoreOutput( key, value )

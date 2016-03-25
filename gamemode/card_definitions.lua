@@ -55,7 +55,7 @@ GAMEMODE:DefineCard( "combine-elite",
 {
 	Name = "Combine Elite",
 	Description = "The elite forces of the ruling Combine regime. Elite soldiers are more durable, more aggressive and more damaging.",
-	Health = 150,
+	Health = 200,
 	Count = 2,
 	IsHero = false,
 	
@@ -68,7 +68,7 @@ GAMEMODE:DefineCard( "combine-elite",
 	WeaponProficiency = WEAPON_PROFICIENCY_VERY_GOOD,
 	
 	DamageSettings = {
-		MeleeDamage = 15
+		MeleeDamage = 20
 	},
 	
 	SpawnFlags = 256 + 1024 + 16834, -- Long visibility + Think outside PVS + Don't give way to player
@@ -109,7 +109,6 @@ GAMEMODE:DefineCard( "zombie",
 	IsHero = false,
 	
 	PortraitMaterial = "cardwars/portraits/zombie",
-	SquadGroup = "zombies",
 	
 	SpawnClass = "npc_zombie",
 	SpawnFlags = 256 + 1024 + 16834, -- Long visibility + Think outside PVS + Don't give way to player
@@ -128,7 +127,6 @@ GAMEMODE:DefineCard( "zombine",
 	IsHero = false,
 	
 	PortraitMaterial = "cardwars/portraits/zombine",
-	SquadGroup = "zombies",
 	
 	SpawnClass = "npc_zombine",
 	SpawnFlags = 256 + 1024 + 16834, -- Long visibility + Think outside PVS + Don't give way to player

@@ -23,10 +23,10 @@ GM.TEAM_BLUE = 1003
 ]]
 function GM:Initialize()
 	
-	team.SetUp( TEAM_RED, "Red Team", Color(255, 0, 0), false )
-	team.SetUp( TEAM_BLUE, "Blue Team", Color(0, 0, 255), false )
+	team.SetUp( self.TEAM_RED, "Red Team", Color(255, 0, 0), false )
+	team.SetUp( self.TEAM_BLUE, "Blue Team", Color(0, 0, 255), false )
 	
-	team.SetSpawnpoint( TEAM_RED, "cw_spawn_red" )
-	team.SetSpawnpoint( TEAM_BLUE, "cw_spawn_blue" )
+	team.SetSpawnPoint( self.TEAM_RED, "cw_spawn_red" )
+	team.SetSpawnPoint( self.TEAM_BLUE, "cw_spawn_blue" )
 	
 end

@@ -60,6 +60,11 @@ function ENT:AcceptInput( inputName, activator, caller, data )
 		
 		card:Spawn()
 		
+		-- Freeze the card immediately
+		local phys = card:GetPhysicsObject()
+		--phys:EnableMotion( false )
+		phys:Sleep()
+		
 	end
 	
 end

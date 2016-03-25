@@ -6,19 +6,26 @@
 	Round module. Handles starting/finishing rounds.
 ]]--
 
+GM.RESULT_DRAW = 0
+
+GM.STATE_STOPPED = 0
+GM.STATE_PREROUND = 1
+GM.STATE_RUNNING = 2
+GM.STATE_POSTROUND = 3
+
 -- Which round we're on
 GM.RoundNumber = 0
-GM.RoundInProgress = false
+GM.RoundState = GM.STATE_STOPPED
+GM.PostRoundTime = 5
 
 GM.RedTeamNPCs = {}
 GM.BlueTeamNPCs = {}
 
-GM.RESULT_DRAW = 0
 
 --[[
 	Name:	GM:StartRound()
 	Desc:	Starts the next round.
-]]
+]]--
 function GM:StartRound()
 	
 	if self:IsRoundInProgress() then
@@ -28,7 +35,7 @@ function GM:StartRound()
 	local roundNo = self.RoundNumber + 1
 	
 	self.RoundNumber = roundNo
-	self.RoundInProgress = true
+	self.RoundState = self.STATE_PREROUND
 	
 	-- For each team, find all their cards
 	local redCards = {}
@@ -55,41 +62,79 @@ function GM:StartRound()
 
 	print( "Card Wars: Round " .. roundNo .. " started" )
 	
+	self.RoundState = self.STATE_RUNNING
+	
 end
 
 
 --[[
 	Name:	GM:EndRound( result )
 	Desc:	Called the round has ended.
-]]
+]]--
 function GM:EndRound( result )
 	
 	if not self:IsRoundInProgress() then
 		error( "Attempt to end round when round was not already in progress!", 2 )
 	end
 	
-	self.RoundInProgress = false
+	self.RoundState = self.STATE_POSTROUND
 	
 	print( "Card Wars: Round " .. self.RoundNumber .. " ended, result was ", result )
 	
-	-- Delete all straggler NPCs
-	for k, v in pairs( self.RedTeamNPCs ) do
-		if IsValid(v) then v:Remove() end
-	end
+	timer.Simple( self.PostRoundTime, function()
+		
+		print( "Post round complete, new round ready" )
+		
+		-- Delete all straggler NPCs
+		for k, v in pairs( self.RedTeamNPCs ) do
+			if IsValid(v) then v:Remove() end
+		end
+		
+		for k, v in pairs( self.BlueTeamNPCs ) do
+			if IsValid(v) then v:Remove() end
+		end
+		
+		self.RedTeamNPCs = {}
+		self.BlueTeamNPCs = {}
+		
+		self.RoundState = self.STATE_STOPPED
+		
+		-- Trigger the cw_interface outputs which the map relies on
+		local interfaces = ents.FindByClass( "cw_interface" )
+		
+		for k, v in pairs( interfaces ) do
+			
+			-- Fire the appropriate red/blue win output, do this before OnRoundEnded.
+			if result == self.TEAM_RED then
+				v:TriggerOutput( "OnRedWin", v )
+			elseif result == self.TEAM_BLUE then
+				v:TriggerOutput( "OnBlueWin", v )
+			else
+				v:TriggerOutput( "OnDraw", v )
+			end
+			
+			v:TriggerOutput( "OnRoundEnded", v )
+			
+		end
 	
-	for k, v in pairs( self.BlueTeamNPCs ) do
-		if IsValid(v) then v:Remove() end
-	end
-	
-	self.RedTeamNPCs = {}
-	self.BlueTeamNPCs = {}
+	end )
 	
 end
 
+--[[
+	Name:	GM:IsRoundInProgress()
+	Desc:	Used to find out if the round is currently in progress.
+	Returns:	true if the round is in STATE_RUNNING
+]]--
 function GM:IsRoundInProgress()
-	return self.RoundInProgress
+	return ( self.RoundState == self.STATE_RUNNING )
 end
 
+
+--[[
+	Name:	GM:OnNPCKilled( npc, attacker, inflictor )
+	Desc:	Called when an NPC has been killed.
+]]--
 function GM:OnNPCKilled( npc, attacker, inflictor )
 	
 	-- Try and remove the npc from red team, and if that fails, from blue.
@@ -100,6 +145,11 @@ function GM:OnNPCKilled( npc, attacker, inflictor )
 	
 end
 
+
+--[[
+	Name:	GM:CheckForWin()
+	Desc:	Checks to see if a team has won the current round.
+]]--
 function GM:CheckForWin()
 	
 	if not self:IsRoundInProgress() then return end
@@ -129,6 +179,15 @@ function GM:CheckForWin()
 	
 end
 
+--[[
+	Name:	GM:SpawnCards( cards, spawnList, npcList, team )
+	Desc:	Spawns all given cards at random entries in the given spawn list, inserting the newly-spawned
+				npcs into npcList.
+	Args:	cards:		 A list of card definitions to spawn.
+				spawnList:	 A list of spawnpoint entities.
+				npcList:		 Any list, the spawned NPCs will be inserted into this.
+				team:		 Any string. Used to spawn NPCs in squads separated by their teams.
+]]--
 function GM:SpawnCards( cards, spawnList, npcList, team )
 
 	-- For each card, pick a random spawnpoint
@@ -157,6 +216,10 @@ function GM:SpawnCards( cards, spawnList, npcList, team )
 	
 end
 
+--[[
+	Name:	GM:ModifyRelationships( redNPCs, blueNPCs )
+	Desc:	Makes all redNPCs hate blueNPCs and vice versa. Also makes all NPCs like players.
+]]--
 function GM:ModifyRelationships( redNPCs, blueNPCs )
 	
 	-- Change the relationship of each NPC.. this requires lots of iteration.
@@ -169,7 +232,7 @@ function GM:ModifyRelationships( redNPCs, blueNPCs )
 		-- Except enemy NPCs
 		for l, blue in pairs( blueNPCs ) do
 			red:AddEntityRelationship( blue, D_HT, 70 )
-			red:SetEnemy( blue )
+			--red:SetEnemy( blue )
 		end
 		
 	end
@@ -183,7 +246,7 @@ function GM:ModifyRelationships( redNPCs, blueNPCs )
 		-- Except enemy NPCs
 		for k, red in pairs( redNPCs ) do
 			blue:AddEntityRelationship( red, D_HT, 70 )
-			blue:SetEnemy( red )
+			--blue:SetEnemy( red )
 		end
 		
 	end
@@ -214,22 +277,28 @@ end
 function GM:SpawnCardNPC( cardDefinition, spawnpoint, team )
 	
 	local ChangeModel = cardDefinition[ "ChangeModel" ]
-	local Count = 1 --cardDefinition[ "Count" ]
+	local Count = cardDefinition[ "Count" ] or 1
 	local DamageSettings = cardDefinition[ "DamageSettings" ]
 	local Health = cardDefinition[ "Health" ]
 	local KeyValues = cardDefinition[ "KeyValues" ]
 	local SpawnClass = cardDefinition[ "SpawnClass" ]
 	local SpawnFlags = cardDefinition[ "SpawnFlags" ]
-	local SquadGroup = cardDefinition[ "SquadGroup" ] or "nogroup"
+	local SquadGroup = cardDefinition[ "SquadGroup" ]
 	local WeaponClass = cardDefinition[ "WeaponClass" ]
 	local WeaponProficiency = cardDefinition[ "WeaponProficiency" ]
 	
-	local spawnPos = spawnpoint:GetPos()
+	local spawnCentre = spawnpoint:GetPos()
 	
 	-- TODO: Adjust position for multiple NPCs as otherwise things will be screwy
 	local spawned = {}
 	
 	for i = 1, Count do
+		local spawnPos = self:FindSpawnNear( spawnCentre )
+		if not spawnPos then
+			print( "**** ERROR: Unable to spawn NPC " .. i .. " of " .. Count .. " (" .. tostring(SpawnClass) .. ") - This is usually a mapping error!" )
+			return spawned
+		end
+		
 		local npc = ents.Create( SpawnClass )
 		
 		if not IsValid( npc ) then
@@ -254,7 +323,8 @@ function GM:SpawnCardNPC( cardDefinition, spawnpoint, team )
 			end
 		end
 		
-		npc:SetKeyValue( "SquadName", "team_" .. tostring(team) .. "_" .. SquadGroup )
+		if SquadGroup then npc:SetKeyValue( "SquadName", "team_" .. tostring(team) .. "_" .. SquadGroup ) end
+		
 		npc:SetKeyValue( "wakeradius", "25000.00" )
 		npc:SetKeyValue( "ignoreunseenenemies", "0" )
 		
@@ -265,17 +335,10 @@ function GM:SpawnCardNPC( cardDefinition, spawnpoint, team )
 		
 		npc.DamageSettings = DamageSettings
 		
-		-- This should hopefully make npcs wake up
-		
-	--setpos 412.729614 8.207086 -447.968750;setang 10.094780 -104.384445 0.000000
-	
-		--
+		-- Wait for the NPC to initialise, then tell it to wake up (makes for more interesting battles)
 		timer.Simple( 0.5, function()
-			npc:SetSaveValue( "m_vecLastPosition", Vector( 412, 8, -447.968750 ) )
 			npc:SetSchedule( SCHED_ALERT_WALK )
 		end )
-		
-		--npc:TakeDamage( 1 )
 		
 		if WeaponProficiency then npc:SetCurrentWeaponProficiency( WeaponProficiency ) end
 		
@@ -284,3 +347,60 @@ function GM:SpawnCardNPC( cardDefinition, spawnpoint, team )
 	
 	return spawned
 end
+
+-- This MOSTLY works. The search range ideally needs to be increased.
+function GM:FindSpawnNear( centrePoint )
+
+	local hullSize = Vector( 20, 20, 80 )
+	local xsz, ysz = hullSize.x + 15, hullSize.y + 15
+	
+	local points = {
+		centrePoint + Vector( -xsz, -ysz, 0 ),
+		centrePoint + Vector( -xsz, 0, 0 ),
+		centrePoint + Vector( -xsz, ysz, 0 ),
+		
+		centrePoint + Vector( 0, -ysz, 0 ),
+		centrePoint,
+		centrePoint + Vector( 0, ysz, 0 ),
+		
+		centrePoint + Vector( xsz, -ysz, 0 ),
+		centrePoint + Vector( xsz, 0, 0 ),
+		centrePoint + Vector( xsz, ysz, 0 )
+	}
+		
+	local trace = {
+		mins = Vector( -hullSize.x / 2, -hullSize.x / 2, 0 ),
+		maxs = Vector( hullSize.x / 2, hullSize.x / 2, hullSize.z ),
+		
+		filter = "prop_ragdoll"
+	}
+		
+	for k, point in pairs( points ) do
+		
+		-- Perform a trace to see if we can spawn something in here
+		trace.start = point + Vector(0, 0, 10)
+		trace.endpos = point + Vector(0, 0, 50)
+		
+		local result = util.TraceHull( trace )
+		
+		if not result.Hit then
+			return point
+		end
+		
+	end
+	
+	return nil
+	
+end
+
+function GM:IsValidSpawnpoint( point, size )
+	
+	local trace = {}
+	trace.start = point
+	trace.endpos = point + Vector(0, 0, size.z)
+	
+	trace.mins = Vector(0, 0, 0)
+	trace.maxs = Vector(0, 0, 0)
+	
+end
+
