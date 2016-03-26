@@ -10,12 +10,20 @@ AddCSLuaFile( "cl_init.lua" )
 AddCSLuaFile( "shared.lua" )
 AddCSLuaFile( "card_definitions.lua" )
 
+AddCSLuaFile( "sh_chat.lua" )
+AddCSLuaFile( "sh_sound.lua" )
+
 include( "shared.lua" )
 include( "card_definitions.lua" )
 include( "round.lua" )
 include( "damage.lua" )
 
+include( "sh_chat.lua" )
+include( "sh_sound.lua" )
+
 resource.AddWorkshop( "651206066" )
+
+GM.DankVar = CreateConVar( "cw_dank_mode_enabled", "0", { FCVAR_REPLICATED, FCVAR_NOTIFY }, "Try me" )
 
 GM.RedHolders = {}
 GM.BlueHolders = {}
@@ -127,7 +135,7 @@ end
 	Desc:	Called to set the player's loadout (i.e. which weapons they have)
 ]]
 function GM:PlayerLoadout( ply )
-	ply:Give( "weapon_physcannon" )
+	--ply:Give( "weapon_physcannon" )
 end
 
 
@@ -138,4 +146,14 @@ end
 function GM:PlayerSwitchFlashlight( ply )
 	-- Allow
 	return true
+end
+
+-- todo: shift to a module
+util.AddNetworkString( "PlaySound" )
+function GM:PlayToAllClients( sound )
+	
+	net.Start( "PlaySound" )
+		net.WriteString( sound )
+	net.Broadcast()
+	
 end

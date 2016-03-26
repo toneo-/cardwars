@@ -1,6 +1,0 @@
-"VertexLitGeneric"
-{
-	"$basetexture" "models/cardwars/cards/base"
-	"$surfaceprop" "wood"
-	"$nolod" 1
-}

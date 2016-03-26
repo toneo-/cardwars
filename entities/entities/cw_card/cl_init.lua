@@ -74,7 +74,7 @@ end
 -- temp
 function ENT:Initialize()
 	
-	self:SetMaterial( "models/cardwars/cards/base" )
+	--self:SetMaterial( "models/cardwars/cards/base" )
 	self.savedLines = false
 	
 	-- Set some card details to reasonable defaults
@@ -155,10 +155,7 @@ function ENT:DrawOverlay()
 	local descLines = self.DescLines
 	
 	-- Don't draw if surface.SetMaterial() would fail. If we do try this we'll fuck up the camera and turn the world into nodraw.
-	if not portrait or portrait:IsError() then
-		print( "portrait=", portrait )
-		return
-	end
+	
 	
 	local angles = self:GetAngles()
 	local angles2D = Angle()
@@ -182,9 +179,11 @@ function ENT:DrawOverlay()
 		draw.SimpleText( tostring(hp), "CardDetail", 288, 71, Color(255, 0, 0, 255), TEXT_ALIGN_CENTER )
 		draw.SimpleText( "x" .. count, "CardDetail", 353, 71, Color(0, 130, 255, 255), TEXT_ALIGN_CENTER )
 		
-		surface.SetMaterial( portrait )
-		surface.SetDrawColor( 255, 255, 255, 255 )
-		surface.DrawTexturedRect( 120, 183, 160, 160 )
+		if portrait and not portrait:IsError() then
+			surface.SetMaterial( portrait )
+			surface.SetDrawColor( 255, 255, 255, 255 )
+			surface.DrawTexturedRect( 120, 183, 160, 160 )
+		end
 		
 		for k, v in pairs( self.DescLines ) do
 			draw.SimpleText( v, "CardDesc", 18, 360 + (k-1) * 30, Color(255, 255, 255, 255) )

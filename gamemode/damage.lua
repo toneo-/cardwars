@@ -6,7 +6,7 @@
 	Damage module. Handles modifiers for damage dealt by NPCs and dealt to players.
 ]]--
 
-util.AddNetworkString( "damage-notify" )
+util.AddNetworkString( "DamageNotify" )
 
 local avoidRecursion = false -- Used for hunter v hunter damage workaround
 
@@ -66,9 +66,11 @@ function GM:EntityTakeDamage( ent, dmginfo )
 			avoidRecursion = false
 		end
 		
-		net.Start( "damage-notify" )
+		net.Start( "DamageNotify" )
 			net.WriteEntity( ent )
+			net.WriteVector( dmginfo:GetDamagePosition() )
 			net.WriteInt( dmginfo:GetDamage(), 17 )
+			net.WriteInt( ent:Health(), 17 )
 		net.Broadcast()
 	end
 	

@@ -22,6 +22,11 @@ GM.RedTeamNPCs = {}
 GM.BlueTeamNPCs = {}
 
 
+GM.RoundEndSongs = {
+	"cardwars/victory/bradberry-tune.mp3"
+}
+
+
 --[[
 	Name:	GM:StartRound()
 	Desc:	Starts the next round.
@@ -66,7 +71,6 @@ function GM:StartRound()
 	
 end
 
-
 --[[
 	Name:	GM:EndRound( result )
 	Desc:	Called the round has ended.
@@ -80,6 +84,28 @@ function GM:EndRound( result )
 	self.RoundState = self.STATE_POSTROUND
 	
 	print( "Card Wars: Round " .. self.RoundNumber .. " ended, result was ", result )
+	
+	-- Tell everyone who won
+	local endingText = "ended in a "
+	local winnerText = "draw!"
+	local winnerColor = Color( 200, 200, 200, 255 )
+	
+	if result ~= self.RESULT_DRAW then
+		
+		endingText = "was won by the "
+		winnerText = team.GetName( result ) .. "!"
+		winnerColor = team.GetColor( result )
+		
+	end
+	
+	fancychat.Broadcast( Color( 255, 255, 255, 255 ), "Round " .. endingText, winnerColor, winnerText )
+	
+	-- Pick some round end music to play
+	local endRoundSong = table.Random( self.RoundEndSongs )
+	if endRoundSong then
+		netsound.PlayToAll( endRoundSong )
+	end
+	
 	
 	timer.Simple( self.PostRoundTime, function()
 		
@@ -253,6 +279,10 @@ function GM:ModifyRelationships( redNPCs, blueNPCs )
 	
 end
 
+--[[
+	Name:	GM:GetAllDefinitions( holderList, definitionList )
+	Desc:	Reads all cards held in the given list of holders and inserts their definitions into the given list.
+]]--
 function GM:GetAllDefinitions( holderList, definitionList )
 	for _, holder in pairs( holderList ) do
 		
@@ -273,7 +303,16 @@ function GM:GetAllDefinitions( holderList, definitionList )
 	end
 end
 
--- Spawns 1 or more npcs on a card
+--[[
+	Name:	GM:SpawnCardNPC( cardDefinition, spawnpoint, team )
+	Desc:	Spawns NPCs as per the given definition and at the specified spawnpoint.
+				In practice this is currently limited to a maximum of 9 NPCs per card (due to implementation).
+	Args:	cardDefinition:	One of the definitions from card_definitions.lua. This can be obtained from
+										a cw_card by calling ENT:GetCardID() and then GM:LookupDefinition().
+				spawnpoint:		The spawnpoint entity to spawn the NPCs at and around.
+				team:				A string which will be used for things such as squads so that NPCs from
+										different teams do not form part of the same squad.
+]]--
 function GM:SpawnCardNPC( cardDefinition, spawnpoint, team )
 	
 	local ChangeModel = cardDefinition[ "ChangeModel" ]
@@ -288,6 +327,8 @@ function GM:SpawnCardNPC( cardDefinition, spawnpoint, team )
 	local WeaponProficiency = cardDefinition[ "WeaponProficiency" ]
 	
 	local spawnCentre = spawnpoint:GetPos()
+	
+	team = team or "nullteam"
 	
 	-- TODO: Adjust position for multiple NPCs as otherwise things will be screwy
 	local spawned = {}
@@ -348,7 +389,12 @@ function GM:SpawnCardNPC( cardDefinition, spawnpoint, team )
 	return spawned
 end
 
--- This MOSTLY works. The search range ideally needs to be increased.
+--[[
+	Name:	GM:FindSpawnNear( centrePoint )
+	Desc:	Checks 9 possible spawn positions around the given centrepoint. This is done by performing
+				9 hull traces.
+	Returns:	The first valid spawn position found around centrePoint, or nil if no position was found.
+]]--
 function GM:FindSpawnNear( centrePoint )
 
 	local hullSize = Vector( 20, 20, 80 )
@@ -393,14 +439,37 @@ function GM:FindSpawnNear( centrePoint )
 	
 end
 
-function GM:IsValidSpawnpoint( point, size )
+--[[
+	Name:	GM:OnEntityCreated( ent )
+	Desc:	Used within card wars to destroy things such as headcrabs which may spawn during the round
+				and may disrupt the balance of the game.
+]]--
+function GM:OnEntityCreated( ent )
+
+	-- A blacklist of classes which are not allowed to spawn during a round.
+	-- A blanked 'npc_*' ban is not used because npc_grenade_frag is a thing.
+	local bannedSpawns = {
+		"npc_headcrab",
+		"npc_headcrab_fast",
+		"npc_headcrab_black"
+	}
 	
-	local trace = {}
-	trace.start = point
-	trace.endpos = point + Vector(0, 0, size.z)
-	
-	trace.mins = Vector(0, 0, 0)
-	trace.maxs = Vector(0, 0, 0)
+	-- This needs to run even when in post-round
+	if self:IsRoundInProgress() or self.RoundState == self.STATE_POSTROUND then
+		
+		local class = ent:GetClass()
+		
+		print( "Entity ", class, " created during round" )
+		
+		-- Delete if within blacklist
+		for _, banned in pairs( bannedSpawns ) do
+			if banned == class then
+				ent:Remove()
+				print( "... removed!" )
+				return
+			end
+		end
+		
+	end
 	
 end
-

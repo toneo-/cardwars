@@ -25,6 +25,14 @@ end
 
 local GAMEMODE = GM
 
+local LONG_VISIBILITY = 256
+local FADE_CORPSE = 512
+local THINK_OUTSIDE_PVS = 1024
+local DONT_DROP_WEAPONS = 8192
+local DONT_GIVE_WAY = 16834
+
+local CommonFlags = LONG_VISIBILITY + FADE_CORPSE + THINK_OUTSIDE_PVS + DONT_DROP_WEAPONS + DONT_GIVE_WAY
+
 GAMEMODE:DefineCard( "combine-soldier",
 {
 	Name = "Combine Soldier",
@@ -37,11 +45,11 @@ GAMEMODE:DefineCard( "combine-soldier",
 	SquadGroup = "overwatch",
 	
 	SpawnClass = "npc_combine_s",
+	SpawnFlags = CommonFlags,
+	
 	WeaponClass = "weapon_smg1",
 	WeaponProficiency = WEAPON_PROFICIENCY_GOOD,
-	
-	SpawnFlags = 256 + 1024 + 16834, -- Long visibility + Think outside PVS + Don't give way to player
-	
+		
 	DamageSettings = {
 		MeleeDamage = 10
 	},
@@ -64,6 +72,8 @@ GAMEMODE:DefineCard( "combine-elite",
 	ChangeModel = "models/combine_super_soldier.mdl",
 	
 	SpawnClass = "npc_combine_s",
+	SpawnFlags = CommonFlags,
+	
 	WeaponClass = "weapon_ar2",
 	WeaponProficiency = WEAPON_PROFICIENCY_VERY_GOOD,
 	
@@ -71,7 +81,6 @@ GAMEMODE:DefineCard( "combine-elite",
 		MeleeDamage = 20
 	},
 	
-	SpawnFlags = 256 + 1024 + 16834, -- Long visibility + Think outside PVS + Don't give way to player
 	
 	KeyValues = {
 		Numgrenades = 200
@@ -90,28 +99,29 @@ GAMEMODE:DefineCard( "metrocop",
 	SquadGroup = "overwatch",
 	
 	SpawnClass = "npc_metropolice",
+	SpawnFlags = CommonFlags,
+	
 	WeaponClass = "weapon_pistol",
-	WeaponProficiency = WEAPON_PROFICIENCY_VERY_GOOD,
+	WeaponProficiency = WEAPON_PROFICIENCY_GOOD,
 	
 	DamageSettings = {
 		MeleeDamage = 10
 	},
 	
-	SpawnFlags = 256 + 1024 + 16834, -- Long visibility + Think outside PVS + Don't give way to player
 } )
 
 GAMEMODE:DefineCard( "zombie",
 {
 	Name = "Zombie",
 	Description = "Abominations created after a headcrab fuses with the nervous system of its victim. Zombies are very slow, but extremely durable.",
-	Health = 250,
+	Health = 300,
 	Count = 4,
 	IsHero = false,
 	
 	PortraitMaterial = "cardwars/portraits/zombie",
 	
 	SpawnClass = "npc_zombie",
-	SpawnFlags = 256 + 1024 + 16834, -- Long visibility + Think outside PVS + Don't give way to player
+	SpawnFlags = CommonFlags,
 	
 	DamageSettings = {
 		MeleeDamage = 35
@@ -129,7 +139,7 @@ GAMEMODE:DefineCard( "zombine",
 	PortraitMaterial = "cardwars/portraits/zombine",
 	
 	SpawnClass = "npc_zombine",
-	SpawnFlags = 256 + 1024 + 16834, -- Long visibility + Think outside PVS + Don't give way to player
+	SpawnFlags = CommonFlags,
 	
 	DamageSettings = {
 		MeleeDamage = 20,
@@ -149,10 +159,10 @@ GAMEMODE:DefineCard( "hunter",
 	SquadGroup = "overwatch",
 	
 	SpawnClass = "npc_hunter",
-	SpawnFlags = 256 + 1024 + 16834, -- Long visibility + Think outside PVS + Don't give way to player
+	SpawnFlags = CommonFlags,
 	
 	DamageSettings = {
-		MeleeDamage = 4,
+		MeleeDamage = 50,
 		RangedDamage = 6 -- Reduced damage, because Hunters are insanely OP otherwise
 	}
 } )

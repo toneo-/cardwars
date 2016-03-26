@@ -26,6 +26,8 @@
 // Spawnpoint for cards
 @PointClass base(Targetname, Parentname, Angles) color( 255 0 0 ) studio("models/cardwars/card.mdl") = cw_card_spawner: "Card Spawner"
 [
+	spawnInto(target_destination) : "Spawn Into" : "" : "Optional. When specified designates a target card holder into which spawned cards will be placed. MUST be unique - if the gamemode finds more than one holder with this name it will refuse to spawn the card."
+	
 	input SpawnCard(void) : "Spawns a random card at this spawner."
 ]
 
@@ -38,13 +40,22 @@
 		2 : "Blue"
 	]
 	
+	startsLocked(choices) : "Starts Locked" : 0 : "Whether or not this card holder should start locked. This card holder will only pick up nearby cards when unlocked." =
+	[
+		0 : "Start Unlocked"
+		1 : "Start Locked"
+	]
+	
 	grabDistance(integer) : "Grab Distance" : 10 : "A card holder will look for cards within a radius of 10 units by default. Try not to make this overlap with other nearby card holders if possible."
 	
 	output OnCardGrabbed(void) : "Fires when a card is grabbed."
 	output OnCardLost(void) : "Fires when an attached card is lost."
 	
+	input Lock(void) : "Locks this holder so it will not pick up nearby cards."
+	input Unlock(void) : "Unlocks this holder so it will once again pick up nearby cards."
 	input ReleaseCard(void) : "Drops the card held by this holder."
-	input RemoveHeldCard(void) : "Deletes the card held by this holder."
+	input RemoveCard(void) : "Deletes the card held by this holder."
+	input SpawnCard(void) : "Spawns a random card in this holder. Will not spawn if a card is already contained."
 ]
 
 @PointClass base(Targetname) color( 255 0 255 ) studio("models/editor/axis_helper_thick.mdl") = cw_interface: "Gamemode Interface"

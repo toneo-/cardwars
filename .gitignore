@@ -1,4 +1,5 @@
 # Ignore specific extensions:
 *.pdn
+*.vmf
 todo.txt
 dev-resources/

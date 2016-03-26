@@ -10,9 +10,6 @@ AddCSLuaFile( "shared.lua" )
 
 include( "shared.lua" )
 
-print( "GM: " .. tostring(GM) )
-print( "GAMEMODE: " .. tostring(GAMEMODE) )
-
 local teamTranslations = {
 	[0] = 0,
 	[1] = GAMEMODE.TEAM_RED,
@@ -23,28 +20,29 @@ local teamTranslations = {
 --[[
 	Name:	ENT:Initialize()
 	Desc:	Called when this entity is first initialised.
-]]
+]]--
 function ENT:Initialize()
 	self.HeldCard = nil
 	
 	self.HoldAngle = Angle(0, 0, 0)
 	
 	self.GrabOffset = Vector(0, 0, 0)
-	self.GrabDistance = 12
+	self.GrabDistance = self.GrabDistance or 12
 	
 	self.RegrabDelay = 2
+	self.Locked = false
 end
 
 
 --[[
 	Name:   ENT:Think()
 	Desc:	Called when this entity needs to think.
-]]
+]]--
 function ENT:Think()
 	
 	-- If not holding a card, look for one close nearby
-	if not self:IsHoldingCard() then
-	
+	if ( not self:IsHoldingCard() ) and ( not self:IsLocked() ) and ( self.GrabDistance > 0 ) then
+		
 		local grabPoint = self:LocalToWorld( self.GrabOffset )
 		local near = ents.FindInSphere( grabPoint, self.GrabDistance )
 		
@@ -72,7 +70,7 @@ end
 --[[
 	Name:	ENT:Use( activator )
 	Desc:	Called when this entity is 'used', triggered by someone walking up to it and pressing E.
-]]
+]]--
 function ENT:Use( activator )
 	
 	-- Eject current held card and play a nice sound
@@ -87,7 +85,7 @@ end
 --[[
 	Name:	ENT:AcceptInput( inputName, activator, caller, data )
 	Desc:	Called when this entity has an input triggered, usually by something in the map.
-]]
+]]--
 function ENT:AcceptInput( inputName, activator, caller, data )
 	
 	if inputName == "ReleaseCard" then
@@ -105,14 +103,22 @@ function ENT:AcceptInput( inputName, activator, caller, data )
 		
 		end
 		
+	elseif inputName == "SpawnCard" then
+		
+		self:SpawnCard()
+		
+	elseif inputName == "Lock" then
+		self:Lock()
+	elseif inputName == "Unlock" then
+		self:Unlock()
 	end
 	
 end
 
 --[[
 	Name:	ENT:KeyValue( key, value )
-	Desc:	Called when this entity has an input triggered, usually by something in the map.
-]]
+	Desc:	Called when this entity has a key/value changed.
+]]--
 function ENT:KeyValue( key, value )
 	
 	-- All of our outputs start with 'On'
@@ -127,6 +133,12 @@ function ENT:KeyValue( key, value )
 			self:SetAssignedTeam( tonumber(value) )
 		elseif key == "grabDistance" then
 			self.GrabDistance = math.max( 0, tonumber(value) )
+		elseif key == "startsLocked" then
+			
+			if value == "1" then
+				self:Lock()
+			end
+			
 		end
 		
 	end
@@ -143,7 +155,7 @@ end
 	Name:	ENT:SetAssignedTeam( teamNo )
 	Desc:	Assigns this card holder to a given team. Any team number other than 0 will cause this
 				card holder to be considered when spawning NPCs.
-]]
+]]--
 function ENT:SetAssignedTeam( teamNo )
 	local translation = teamTranslations[ teamNo ]
 	if not translation then
@@ -157,7 +169,7 @@ end
 --[[
 	Name:	ENT:GetAssignedTeam()
 	Desc:	Finds out which team this card holder is assigned to.
-]]
+]]--
 function ENT:GetAssignedTeam()
 	return self.AssignedTeam or 0
 end
@@ -166,7 +178,7 @@ end
 	Name:	ENT:IsHoldingCard()
 	Desc:	Used to find out if a card holder is holding a (valid) card.
 	Returns:	true if holding a card, false otherwise
-]]
+]]--
 function ENT:IsHoldingCard()
 	return ( self.HeldCard and IsValid( self.HeldCard ) )
 end
@@ -176,7 +188,7 @@ end
 	Name:	ENT:CanHold()
 	Desc:	Used to find out if a card holder can hold the given card. Filters out things that are not cards and cards that are already held in another holder.
 	Returns:	true if the given entity can be held, false otherwise
-]]
+]]--
 function ENT:CanHold( card )
 	return ( IsValid(card) and card:GetClass() == "cw_card" and not IsValid( card:GetHolder() ) )
 end
@@ -186,7 +198,7 @@ end
 	Name:	ENT:GetHeldCard()
 	Desc:	Used to retrieve the card held by a card holder.
 	Returns:	Guess
-]]
+]]--
 function ENT:GetHeldCard()
 	return self.HeldCard
 end
@@ -195,7 +207,7 @@ end
 --[[
 	Name:	ENT:HoldCard( card )
 	Desc:	Puts the given card into the holder and freezes it. Does no validation beyond checking the holder isn't full and that the card is valid.
-]]
+]]--
 function ENT:HoldCard( card )
 	if self:IsHoldingCard() or not IsValid(card) or not self:CanHold(card) then
 		error( "ENT:HoldCard() called improperly - card = " .. tostring(card) .. ", self.HeldCard = " .. tostring(self.HeldCard), 2 )
@@ -226,7 +238,7 @@ end
 --[[
 	Name:	ENT:ReleaseCard()
 	Desc:	Releases the card currently being held, causing it to fall to the floor.
-]]
+]]--
 function ENT:ReleaseCard()
 	if not self:IsHoldingCard() then return end
 	
@@ -244,6 +256,77 @@ function ENT:ReleaseCard()
 	self.HeldCard = nil
 	card:SetHolder( nil )
 	
-	self:TriggerOutput( "OnCardReleased", self )
+	self:TriggerOutput( "OnCardLost", self )
 	self:NextThink( CurTime() + self.RegrabDelay )
+end
+
+--[[
+	Name:	ENT:Lock()
+	Desc:	Locks this card holder so the player cannot interact with it.
+]]--
+function ENT:Lock()
+	self.Locked = true
+	self:NextThink( CurTime() + 50000 )
+end
+
+
+--[[
+	Name:	ENT:Unlock()
+	Desc:	Unlocks this card holder so the player can once again interact with it.
+]]--
+function ENT:Unlock()
+	self.Locked = false
+	self:NextThink( CurTime() )
+end
+
+--[[
+	Name:	ENT:IsLocked()
+	Desc:	Guess
+]]--
+function ENT:IsLocked()
+	return self.Locked
+end
+
+--------------
+
+
+function ENT:SpawnCard()
+
+	-- Do not spawn a card into this holder if we already contain one
+	if self:IsHoldingCard() then return end
+	
+	local definitions = GAMEMODE.CardDefinitions
+	if not definitions then
+		error( "Can't spawn card as GAMEMODE.CardDefinitions is nil! Oops!" )
+	end
+	
+	local count = table.Count( definitions )
+	local selectIndex = math.random( 1, count ) -- Choose random card
+	local chosenID
+	
+	local card = ents.Create( "cw_card" )
+	
+	card:SetPos( self:GetPos() )
+	card:SetAngles( self:GetAngles() )
+	
+	-- Grab the selected card from the definition list
+	local i = 1
+	for k, def in pairs( definitions ) do
+	
+		if i == selectIndex then
+			print( "Selecting random card " .. k )
+			chosenID = k
+			break
+		end
+		
+		i = i + 1
+		
+	end
+	
+	-- Associate this card definition with this card
+	card:SetCardID( chosenID )
+	card:Spawn()
+	
+	self:HoldCard( card )
+	
 end

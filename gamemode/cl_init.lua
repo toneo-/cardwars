@@ -7,10 +7,16 @@
 ]]--
 include( "shared.lua" )
 include( "card_definitions.lua" )
+include( "sh_chat.lua" )
+include( "sh_sound.lua" )
+
+local hitmarker = Material( "cardwars/hitsplat.png", "unlitgeneric alphatest" )
 
 function GM:HUDPaint()
 	self:DrawNPCHealthbars()
 	--self:DebugShowEntities()
+	
+		self:HandleDankModeUI()
 end
 
 function GM:DrawNPCHealthbars()
@@ -63,4 +69,56 @@ function GM:DebugShowEntities()
 		
 	end
 	
+end
+
+
+-- Handle damage notify messages
+net.Receive( "DamageNotify", function( length )
+	local ent = net.ReadEntity()
+	local hitPos = net.ReadVector()
+	local damage = net.ReadInt( 17 )
+	local newHealth = net.ReadInt( 17 )
+	
+	ent:SetHealth( newHealth )
+	
+	if GAMEMODE:IsDankModeEnabled() then
+		ent:EmitSound( "cardwars/effects/cod-hitsound.mp3", 120 )
+		GAMEMODE:MakeHitMarker( ent, ent:WorldToLocal( hitPos ), damage, 0.4 )
+	end
+end )
+
+-- secret
+GM.HitMarkers = {}
+
+function GM:MakeHitMarker( ent, pos, dmg, duration )
+	local marker = { ent = ent, pos = pos, dmg = dmg, endtime = CurTime() + duration }
+	table.insert( self.HitMarkers, marker )
+end
+
+function GM:HandleDankModeUI()
+	surface.SetMaterial( hitmarker )
+	
+	local now = CurTime()
+	local HitMarkers = self.HitMarkers
+		
+	for k, marker in pairs( HitMarkers ) do
+		
+		if marker.endtime < now then
+			HitMarkers[k] = nil
+		else
+		
+			local scrPos = marker.ent:LocalToWorld( marker.pos ):ToScreen()
+			local splatColor = Color( 255, 0, 0, 255 )
+			
+			if marker.dmg < 1 then splatColor = Color( 0, 100, 255, 255 ) end
+			
+			surface.SetDrawColor( splatColor.r, splatColor.g, splatColor.b, splatColor.a )
+			surface.DrawTexturedRect( scrPos.x - 16, scrPos.y - 16, 32, 32 )
+			
+			draw.SimpleText( tostring( marker.dmg ), "BudgetLabel", scrPos.x, scrPos.y, Color( 0, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+			
+			draw.SimpleText( tostring( marker.dmg ), "BudgetLabel", scrPos.x - 2, scrPos.y - 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+			
+		end
+	end
 end

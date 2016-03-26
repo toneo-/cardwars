@@ -46,30 +46,31 @@ function ENT:Use( activator )
 	-- If attached to a holder, drop
 	if IsValid( holder ) then
 		
-		holder:ReleaseCard()
-		self:EmitSound( "physics/metal/metal_sheet_impact_soft2.wav" )
-		
-	elseif ( IsValid(activator) and activator:IsPlayer() ) then
-		
-		-- Otherwise, allow the player to pick it up if it's not already held
-		if not self:IsPlayerHolding() then
-		
-			activator:PickupObject( self )
-			self.PickerUpper = activator -- Mark who is holding this card so we can let just them drop it
-			
-		else
-		
-			-- We were used when held, only allow the current holder to drop it
-			local pickerUpper = self.PickerUpper
-			if ( IsValid(pickerUpper) and pickerUpper:IsPlayer() ) then
-			
-				pickerUpper:DropObject()
-				self.pickerUpper = nil
-				
-			end
-		
+		-- If not locked, release card. Otherwise do nothing (and don't run that elseif either)
+		if not holder:IsLocked() then
+			holder:ReleaseCard()
+			self:EmitSound( "physics/metal/metal_sheet_impact_soft2.wav" )
 		end
 		
+	end
+		
+	-- The card should always be picked up when used, except if already held
+	if not self:IsPlayerHolding() then
+	
+		activator:PickupObject( self )
+		self.PickerUpper = activator -- Mark who is holding this card so we can let just them drop it
+		
+	else
+	
+		-- We were used when held, only allow the current holder to drop it
+		local pickerUpper = self.PickerUpper
+		if ( IsValid(pickerUpper) and pickerUpper:IsPlayer() ) then
+		
+			pickerUpper:DropObject()
+			self.pickerUpper = nil
+			
+		end
+	
 	end
 	
 end

@@ -30,3 +30,9 @@ function GM:Initialize()
 	team.SetSpawnPoint( self.TEAM_BLUE, "cw_spawn_blue" )
 	
 end
+
+-- secret
+function GM:IsDankModeEnabled()
+	local cvar = GetConVar( "cw_dank_mode_enabled" )
+	return cvar:GetInt() == 1
+end
