@@ -33,9 +33,9 @@ local DONT_GIVE_WAY = 16834
 
 local CommonFlags = LONG_VISIBILITY + FADE_CORPSE + THINK_OUTSIDE_PVS + DONT_DROP_WEAPONS + DONT_GIVE_WAY
 
-GAMEMODE:DefineCard( "combine-soldier",
+GAMEMODE:DefineCard( "combine-soldier-smg",
 {
-	Name = "Combine Soldier",
+	Name = "Combine Soldier (SMG)",
 	Description = "Combine soldiers are aggressive and throw grenades.",
 	Health = 100,
 	Count = 3,
@@ -48,6 +48,32 @@ GAMEMODE:DefineCard( "combine-soldier",
 	SpawnFlags = CommonFlags,
 	
 	WeaponClass = "weapon_smg1",
+	WeaponProficiency = WEAPON_PROFICIENCY_GOOD,
+		
+	DamageSettings = {
+		MeleeDamage = 10
+	},
+	
+	KeyValues = {
+		Numgrenades = 200
+	}
+} )
+
+GAMEMODE:DefineCard( "combine-soldier-ar2",
+{
+	Name = "Combine Soldier (AR2)",
+	Description = "Combine soldiers are aggressive and throw grenades.",
+	Health = 100,
+	Count = 3,
+	IsHero = false,
+	
+	PortraitMaterial = "cardwars/portraits/combine-soldier",
+	SquadGroup = "overwatch",
+	
+	SpawnClass = "npc_combine_s",
+	SpawnFlags = CommonFlags,
+	
+	WeaponClass = "weapon_ar2",
 	WeaponProficiency = WEAPON_PROFICIENCY_GOOD,
 		
 	DamageSettings = {
@@ -76,6 +102,33 @@ GAMEMODE:DefineCard( "combine-elite",
 	
 	WeaponClass = "weapon_ar2",
 	WeaponProficiency = WEAPON_PROFICIENCY_VERY_GOOD,
+	
+	DamageSettings = {
+		MeleeDamage = 20
+	},
+	
+	
+	KeyValues = {
+		Numgrenades = 200
+	}
+} )
+
+GAMEMODE:DefineCard( "citizen",
+{
+	Name = "Citizen",
+	Description = "Untrained militia. They might sometimes point the gun in the right direction.",
+	Health = 90,
+	Count = 5,
+	IsHero = false,
+	
+	PortraitMaterial = "cardwars/portraits/combine-elite",
+	SquadGroup = "overwatch",
+	
+	SpawnClass = "npc_citizen",
+	SpawnFlags = CommonFlags,
+	
+	WeaponClass = "weapon_smg1",
+	WeaponProficiency = WEAPON_PROFICIENCY_POOR,
 	
 	DamageSettings = {
 		MeleeDamage = 20
@@ -163,6 +216,6 @@ GAMEMODE:DefineCard( "hunter",
 	
 	DamageSettings = {
 		MeleeDamage = 50,
-		RangedDamage = 6 -- Reduced damage, because Hunters are insanely OP otherwise
+		RangedDamage = 5 -- Reduced damage, because Hunters are insanely OP otherwise
 	}
 } )
