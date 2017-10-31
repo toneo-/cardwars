@@ -90,7 +90,7 @@ GAMEMODE:DefineCard( "combine-elite",
 GAMEMODE:DefineCard( "metrocop",
 {
 	Name = "Metrocop",
-	Description = "More ruthless than a Texan police officer in a bar full of black people. Metrocops are weak and rely on numbers.",
+	Description = "Regular citizens tasked with enforcing order. A good supporting unit, but very fragile.",
 	Health = 75,
 	Count = 5,
 	IsHero = false,
