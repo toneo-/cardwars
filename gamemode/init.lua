@@ -104,6 +104,11 @@ function GM:PlayerSpawn( ply )
 	end
 end
 
+function GM:PlayerNoClip()
+	
+	return self.DankVar:GetBool() -- debug
+	
+end
 
 --[[
 	Name:	GM:InitPostEntity()

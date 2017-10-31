@@ -60,7 +60,8 @@ function GM:StartRound()
 	self:SpawnCards( blueCards, blueSpawns, blueNPCs, "blue" )
 	
 	-- Make red NPCs hate blue and vice versa, whilst also not teamkilling
-	self:ModifyRelationships( redNPCs, blueNPCs )
+	self:ModifyRelationships( redNPCs )
+	self:ModifyRelationships( blueNPCs )
 	
 	self.RedTeamNPCs = redNPCs
 	self.BlueTeamNPCs = blueNPCs
@@ -246,35 +247,18 @@ end
 	Name:	GM:ModifyRelationships( redNPCs, blueNPCs )
 	Desc:	Makes all redNPCs hate blueNPCs and vice versa. Also makes all NPCs like players.
 ]]--
-function GM:ModifyRelationships( redNPCs, blueNPCs )
+function GM:ModifyRelationships( npcs )
 	
-	-- Change the relationship of each NPC.. this requires lots of iteration.
-	for k, red in pairs( redNPCs ) do
-	
-		-- Make them like everything
-		red:AddRelationship( "npc_* D_LI 50" )
-		red:AddRelationship( "player D_LI 99" )
-		
-		-- Except enemy NPCs
-		for l, blue in pairs( blueNPCs ) do
-			red:AddEntityRelationship( blue, D_HT, 70 )
-			--red:SetEnemy( blue )
+	for _, v in pairs( npcList ) do
+		for __, v2 in pairs( npcList ) do
+			
+			if v ~= v2 then
+				v:AddEntityRelationship( v2, D_LI, 99 )
+			end
+			
 		end
 		
-	end
-	
-	for l, blue in pairs( blueNPCs ) do
-	
-		-- Make them like everything
-		blue:AddRelationship( "npc_* D_LI 50" )
-		blue:AddRelationship( "player D_LI 99" )
-		
-		-- Except enemy NPCs
-		for k, red in pairs( redNPCs ) do
-			blue:AddEntityRelationship( red, D_HT, 70 )
-			--blue:SetEnemy( red )
-		end
-		
+		v:AddRelationship( "player D_LI 99" )
 	end
 	
 end
